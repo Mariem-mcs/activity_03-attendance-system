@@ -1,42 +1,66 @@
 <?php
-include 'db_connection.php';
+require_once 'db.connection.php';
+session_start();
 
-// Debug: Check if we're receiving the request
-error_log("Login request received");
-file_put_contents('debug.log', "Login attempt: " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
+header('Content-Type: application/json');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = $_POST['email'] ?? '';
+error_log("Login attempt received: " . date('Y-m-d H:i:s'));
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
     
-    error_log("Email: $email, Password: $password");
+    error_log("Email: $email, Password length: " . strlen($password));
     
-    // Check in students table
-    $stmt = $pdo->prepare("SELECT * FROM student WHERE email = ? AND password = ?");
-    $stmt->execute([$email, $password]);
-    $student = $stmt->fetch();
-    
-    if ($student) {
-        error_log("Student login successful");
-        echo json_encode(['success' => true, 'user_type' => 'student', 'user' => $student]);
+    if (empty($email) || empty($password)) {
+        echo json_encode(['success' => false, 'message' => 'Email and password are required']);
         exit;
     }
     
-    // Check in faculty table
-    $stmt = $pdo->prepare("SELECT * FROM Faculty_Intern WHERE email = ? AND password = ?");
-    $stmt->execute([$email, $password]);
-    $faculty = $stmt->fetch();
-    
-    if ($faculty) {
-        error_log("Faculty login successful");
-        echo json_encode(['success' => true, 'user_type' => 'faculty', 'user' => $faculty]);
-        exit;
+    try {
+        // Check in student table first
+        $stmt = $pdo->prepare("SELECT *, 'Student' as role FROM student WHERE email = ?");
+        $stmt->execute([$email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // If not found in student, check in faculty table
+        if (!$user) {
+            $stmt = $pdo->prepare("SELECT *, 'Faculty Intern' as role FROM Faculty_Intern WHERE email = ?");
+            $stmt->execute([$email]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        
+        error_log("User found: " . ($user ? 'Yes' : 'No'));
+        
+        if ($user) {
+            // For testing with plain text passwords (temporary)
+            if ($password === $user['password'] || password_verify($password, $user['password'])) {
+                $_SESSION['user_id'] = $user['student_id'] ?? $user['Faculty_id'];
+                $_SESSION['email'] = $user['email'];
+                $_SESSION['name'] = $user['first_name'] . ' ' . $user['last_name'];
+                $_SESSION['role'] = $user['role'];
+                
+                error_log("Login successful for: " . $user['email'] . " with role: " . $user['role']);
+                
+                echo json_encode([
+                    'success' => true, 
+                    'role' => $user['role'],
+                    'message' => 'Login successful'
+                ]);
+            } else {
+                error_log("Password verification failed");
+                echo json_encode(['success' => false, 'message' => 'Invalid password']);
+            }
+        } else {
+            error_log("No user found with email: $email");
+            echo json_encode(['success' => false, 'message' => 'No account found with this email']);
+        }
+        
+    } catch (PDOException $e) {
+        error_log("Database error: " . $e->getMessage());
+        echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
     }
-    
-    error_log("Login failed - no user found");
-    echo json_encode(['success' => false, 'message' => 'Invalid credentials']);
 } else {
-    error_log("Invalid request method");
     echo json_encode(['success' => false, 'message' => 'Invalid request method']);
 }
 ?>

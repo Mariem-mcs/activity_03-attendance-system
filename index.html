@@ -1,270 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Attendance Management System</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Attendance Management | Login</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <div class="container">
-        <!-- Login/Register Section (Initially Visible) -->
-        <div class="header">
-            <h4>Attendance Management System</h1>
-            <p>Attendance Management System</p>
-        </div>
-        
-        <div class="auth-container" id="auth-container">
-            <div class="tabs">
-                <div class="tab active" id="login-tab">Login</div>
-                <div class="tab" id="register-tab">Sign Up</div>
-            </div>
-            
-            <!-- Login Form -->
-            <div class="tab-content active" id="login-content">
-                <form id="login-form">
-                    <div class="form-group">
-                        <label for="login-email">Email</label>
-                        <input type="email" id="login-email" placeholder="yourusername@ashesi.edu.gh" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="login-password">Password</label>
-                        <input type="password" id="login-password" placeholder="Enter your password" required>
-                    </div>
-                    
-                    <div class="checkbox-group">
-                        <input type="checkbox" id="stay-signed-in">
-                        <label for="stay-signed-in">Remember me</label>
-                    </div>
-                    
-                    <button type="submit" class="btn">Login</button>
-                    
-                    <div class="auth-footer">
-                        <a href="#">Forget password?</a>
-                    </div>
-                </form>
-            </div>
-            
-            <!-- Register Form -->
-            <div class="tab-content" id="register-content">
-                <form id="register-form">
-                    <div class="form-group">
-                        <label for="reg-name">Full name</label>
-                        <input type="text" id="reg-name" placeholder="Enter your full name" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="reg-email">Email</label>
-                        <input type="email" id="reg-email" placeholder="yourusername@ashesi.edu.gh" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="reg-password">Password</label>
-                        <input type="password" id="reg-password" placeholder="Create a password" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="reg-confirm-password">Confirm Password</label>
-                        <input type="password" id="reg-confirm-password" placeholder="Confirm your password" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="Faculty-Intern" name="user-type">
-                            <label for="Faculty-Intern">Faculty Intern</label>
-                        </div>
-                    </div>
+  <div class="container">
+    <div class="auth-box">
+      <h2>Attendance Management System</h2>
 
-                    <div class="form-group">
-                        <div class="checkbox-group">
-                            <input type="checkbox" id="Student" name="user-type">
-                            <label for="Student">Student</label>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn">Sign Up</button>
-                </form>
-            </div>
-        </div>
+      <!-- Login Form -->
+      <form id="login-form" class="form active">
+        <h3>Login</h3>
+        <input type="email" id="login-email" placeholder="Email" required>
+        <input type="password" id="login-password" placeholder="Password" required>
+        <button type="submit">Login</button>
+        <p>Don't have an account? <a href="#" id="show-register">Register</a></p>
+      </form>
 
-        <!-- Welcome Page (Initially Hidden) -->
-        <div class="welcome-page" id="welcome-page">
-            <h2>YOU HAVE SUCCESSFULLY LOGGED IN</h2>
-            <h3>WELCOME TO ATTENDANCE MANAGEMENT SYSTEM</h3>
-            <p id="welcome-message">Welcome!</p>
-        </div>
+      <!-- Register Form -->
+      <form id="register-form" class="form">
+        <h3>Register</h3>
+        <input type="text" id="register-name" placeholder="Full name" required>
+        <input type="email" id="register-email" placeholder="Email" required>
+        <input type="password" id="register-password" placeholder="Password (min 6 chars)" required>
+        <input type="password" id="register-confirm-password" placeholder="Confirm password" required>
 
-        <!-- NEW DASHBOARD (Initially Hidden) -->
-        <div class="dashboard" id="dashboard">
-            <nav class="navbar">
-                <ul class="nav-links">
-                    <li><a href="#" class="active" data-tab="courses">Courses</a></li>
-                    <li><a href="#" data-tab="attendance">Attendance Report</a></li>
-                    <li><a href="#" data-tab="profile">Profile</a></li>
-                    <li><a href="#" data-tab="settings">Settings</a></li>
-                </ul>
-                <button class="logout-btn" id="dashboard-logout">Logout</button>
-            </nav>
+        <select id="register-role" required>
+          <option value="">Select role</option>
+          <option value="Student">Student</option>
+          <option value="Faculty Intern">Faculty Intern</option>
+        </select>
 
-            <div class="dashboard-content">
-                <!-- Welcome Section -->
-                <div class="welcome-section">
-                    <h3 id="welcome-text">Welcome!</h3>
-                    <p>Manage your courses, track attendance, and update your profile.</p>
-                </div>
-
-                <!-- Courses Tab -->
-                <div class="tab-content active" id="courses-tab">
-                    <div class="section-header">
-                        <h3>My Courses</h3>
-                        <p>Current semester courses and attendance status</p>
-                    </div>
-                    
-                    <div class="courses-grid" id="courses-grid">
-                        <!-- Courses will be loaded here from JSON -->
-                    </div>
-                </div>
-
-                <!-- Attendance Report Tab -->
-                <div class="tab-content" id="attendance-tab">
-                    <div class="section-header">
-                        <h3>Attendance Report</h3>
-                        <p>View your attendance history and statistics</p>
-                    </div>
-                    
-                    <div class="attendance-stats">
-                        <div class="stat-card">
-                            <h4>Overall Attendance</h4>
-                            <div class="stat-number">92%</div>
-                            <div class="stat-description">This semester</div>
-                        </div>
-                        <div class="stat-card">
-                            <h4>Classes Attended</h4>
-                            <div class="stat-number">46</div>
-                            <div class="stat-description">Out of 50 total</div>
-                        </div>
-                        <div class="stat-card">
-                            <h4>Current Streak</h4>
-                            <div class="stat-number">15</div>
-                            <div class="stat-description">Consecutive classes</div>
-                        </div>
-                    </div>
-
-                    <div class="attendance-history">
-                        <h4>Recent Attendance</h4>
-                        <div class="history-list">
-                            <div class="history-item present">
-                                <span class="course-name">CS350 - Web Technologies</span>
-                                <span class="attendance-status">Present</span>
-                                <span class="attendance-date">Today, 2:00 PM</span>
-                            </div>
-                            <div class="history-item absent">
-                                <span class="course-name">CS370 - Database Systems</span>
-                                <span class="attendance-status">Absent</span>
-                                <span class="attendance-date">Yesterday, 10:00 AM</span>
-                            </div>
-                            <div class="history-item present">
-                                <span class="course-name">BUSA224 - Finance</span>
-                                <span class="attendance-status">Present</span>
-                                <span class="attendance-date">Oct 8, 1:00 PM</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Profile Tab -->
-                <div class="tab-content" id="profile-tab">
-                    <div class="section-header">
-                        <h3>My Profile</h3>
-                        <p>Manage your personal information</p>
-                    </div>
-                    
-                    <div class="profile-card">
-                        <div class="profile-header">
-                            <div class="avatar">MU</div>
-                            <div class="profile-info">
-                                <h4 id="profile-name">Mariem User</h4>
-                                <p>Student ID: ASH2024001</p>
-                                <p>Computer Science Major</p>
-                            </div>
-                        </div>
-                        
-                        <div class="profile-details">
-                            <div class="detail-item">
-                                <label>Email:</label>
-                                <span>mariem@ashesi.edu.gh</span>
-                            </div>
-                            <div class="detail-item">
-                                <label>Phone:</label>
-                                <span>+233 123 456 789</span>
-                            </div>
-                            <div class="detail-item">
-                                <label>Year:</label>
-                                <span>Senior</span>
-                            </div>
-                            <div class="detail-item">
-                                <label>Department:</label>
-                                <span>Computer Science</span>
-                            </div>
-                        </div>
-                        
-                        <button class="btn edit-profile-btn">Edit Profile</button>
-                    </div>
-                </div>
-
-                <!-- Settings Tab -->
-                <div class="tab-content" id="settings-tab">
-                    <div class="section-header">
-                        <h3>Settings</h3>
-                        <p>Customize your application preferences</p>
-                    </div>
-                    
-                    <div class="settings-card">
-                        <h4>Notification Preferences</h4>
-                        <div class="setting-item">
-                            <label class="switch">
-                                <input type="checkbox" checked>
-                                <span class="slider"></span>
-                            </label>
-                            <span>Email notifications</span>
-                        </div>
-                        <div class="setting-item">
-                            <label class="switch">
-                                <input type="checkbox" checked>
-                                <span class="slider"></span>
-                            </label>
-                            <span>Attendance reminders</span>
-                        </div>
-                        <div class="setting-item">
-                            <label class="switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                            <span>Weekly reports</span>
-                        </div>
-                        
-                        <h4>Appearance</h4>
-                        <div class="setting-item">
-                            <label class="switch">
-                                <input type="checkbox">
-                                <span class="slider"></span>
-                            </label>
-                            <span>Dark mode</span>
-                        </div>
-                        
-                        <button class="btn save-settings-btn">Save Settings</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-            
-        <div class="platform-info">
-            <strong>Attendance Management System</strong><br>
-            | Ashesi University | Berekuso, Ghana
-        </div>
+        <button type="submit">Register</button>
+        <p>Already have an account? <a href="#" id="show-login">Login</a></p>
+      </form>
     </div>
+  </div>
 
-    <script src="auth.js"></script>
+  <script src="auth.js"></script>
 </body>
 </html>

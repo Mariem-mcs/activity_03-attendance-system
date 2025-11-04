@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Student Dashboard</title>
+  <link rel="stylesheet" href="student-dashboard.css">
+</head>
+<body>
+  <nav class="navbar">
+    <h2>Attendance Management System</h2>
+    <ul>
+      <li><a href="#">Dashboard</a></li>
+      <li><a href="#">Mark Attendance</a></li>
+      <li><a href="#">View Reports</a></li>
+      <li><a href="#" id="auditorsLink">Auditors</a></li>
+      <li><a href="#" id="viewersLink">Viewers</a></li>
+    </ul>
+    <button class="logout-btn">Logout</button>
+  </nav>
+
+  <main class="dashboard">
+    <section class="welcome-card">
+      <h3 id="welcome"></h3>
+      <p>Welcome to your dashboard!</p>
+    </section>
+
+    <div class="cards">
+      <div class="card">
+        <h4>Mark Attendance</h4>
+        <p>Submit your attendance for today's session.</p>
+      </div>
+      <div class="card">
+        <h4>View Reports</h4>
+        <p>Check your attendance progress.</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="student-dashboard.js"></script>
+</body>
+</html>
